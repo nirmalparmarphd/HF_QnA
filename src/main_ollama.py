@@ -13,19 +13,22 @@ os.environ['LANGSMITH_ENDPOINT']=os.getenv('LANGSMITH_ENDPOINT')
 os.environ['LANGSMITH_PROJECT']=os.getenv('LANGSMITH_PROJECT')
 
 # Define your prompt template
-template = """Question: {question}
+system_template = """Your name is 'LocBot'. Always write your name (>>>LocBot) on the top of all replies. Your primary task is to help user to learn {language}. If you don't know about the language that user is asking, please reply that you cannot help. For given input {text}, alway breakdown the sentence with it's meaning into asked {language}."""
 
-Answer: Let's think step by step."""
-
-prompt = ChatPromptTemplate.from_template(template)
+# defining the prompt template
+prompt_template = ChatPromptTemplate.from_messages(
+    [("system", system_template),
+     ("user", "{text}")]
+)
 
 # Initialize the Ollama LLM with the desired model
 model = OllamaLLM(model="llama3.2")
 
 # Combine the prompt and model into a chain
-chain = prompt | model
+chain = prompt_template | model
 
 # Run the chain with your input question
-response = chain.invoke({"question": "Can you translate to Czech language?"})
+response = chain.invoke({"language":"czech",
+                         "text":"hello, how are you?"})
 
 print(response)
