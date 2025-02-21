@@ -1,2 +1,4 @@
-# HF_QnA
-Document Q&amp;A Chatbot
+# LocBot
+
+
+A bot based on a LLM running on a local machine
